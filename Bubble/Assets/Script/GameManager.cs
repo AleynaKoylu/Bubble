@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -26,7 +27,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     AudioSource audioSource;
 
-
+    [SerializeField]
+    GameObject RestartPanel;
     void Start()
     {
 
@@ -63,8 +65,6 @@ public class GameManager : MonoBehaviour
         }
 
     }
-  
-  
    void ShowBaloon()
     {
         foreach (var b in Baloons)
@@ -101,7 +101,10 @@ public class GameManager : MonoBehaviour
                 
                 if (hit.collider.name=="Red")
                 {
-                    second -= 10;
+                    
+                   second -= 10;
+                    
+                    
                 }
                 else
                 {
@@ -127,14 +130,35 @@ public class GameManager : MonoBehaviour
         second -=Time.deltaTime;
         int time = (int)second;
         SecondTxt.text =time.ToString();
-        if (time == 0)
+        if (time <= 0)
         {
-            Time.timeScale = 0;
+            time = 0;
+            SecondTxt.text = time.ToString();
+            StopStartTime(0);
+            ActiveButton(RestartPanel);
         }
     }
     public void WriteScore()
     {
-        ScoreTxt.text = score.ToString();
+        if (score >= 0)
+        {
+            ScoreTxt.text = score.ToString();
+        }
+            
+    }
+    public void LoadScenee(int sceneBuildIndex)
+    {
+        SceneManager.LoadScene(sceneBuildIndex);
+    }
+
+    public void ActiveButton(GameObject activeObject)
+    {
+        activeObject.SetActive(true);
+    }
+ 
+    public void StopStartTime(int value)
+    {
+        Time.timeScale = value;
     }
     private void Update()
     {
@@ -144,8 +168,17 @@ public class GameManager : MonoBehaviour
             BaloonPop();
         }
         Second();
+        HighScore();
         
-        
+    }
+    void HighScore()
+    {
+        Debug.Log(PlayerPrefs.GetInt("Highscore"));
+        if (score > PlayerPrefs.GetInt("Highscore"))
+        {
+            PlayerPrefs.SetInt("Highscore", score);
+           
+        }
     }
 }
      
