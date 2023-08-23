@@ -7,7 +7,7 @@ public class Baloon : MonoBehaviour
 
     float speed=2f;
 
-
+    Color color;
     private void OnEnable()
     {
         

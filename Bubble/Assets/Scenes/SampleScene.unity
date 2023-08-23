@@ -331,6 +331,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Baloon: {fileID: 961606176033302149, guid: 3f85ee7729646c94aaf33ec61f5f5b00, type: 3}
+  Materials:
+  - {fileID: 2100000, guid: 1f6b30b35596a7c4b8809f6416eca2f7, type: 2}
+  - {fileID: 2100000, guid: edff8b61fc984254a8bbf8be87e5af59, type: 2}
+  - {fileID: 2100000, guid: 05899763b442d4f43b9ae9c8fc08f96e, type: 2}
+  - {fileID: 2100000, guid: 481d6130476cc164b9577f54fc9753b2, type: 2}
+  - {fileID: 2100000, guid: f35743e85380f3e4d9742410b5d119c4, type: 2}
+  - {fileID: 2100000, guid: 1a66ba121f69c6741b3c0a2c743afa11, type: 2}
 --- !u!4 &1184018154
 Transform:
   m_ObjectHideFlags: 0
