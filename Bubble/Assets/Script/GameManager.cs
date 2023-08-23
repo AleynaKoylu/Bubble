@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class GameManager : MonoBehaviour
     GameObject Baloon;
 
     int score = 0;
-    float second = 50;
+    float second = 20;
 
     List<GameObject> Baloons = new List<GameObject>();
 
@@ -16,6 +17,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     List<Material> Materials = new List<Material>();
 
+    [SerializeField]
+    TextMeshProUGUI SecondTxt;
+    [SerializeField]
+    TextMeshProUGUI ScoreTxt;
+
+    
 
     MeshRenderer meshRenderer;
     void Start()
@@ -23,8 +30,8 @@ public class GameManager : MonoBehaviour
 
         LoadBaloon();
         InvokeRepeating("ShowBaloon", 0, 1f);
+        SecondTxt.text = second.ToString();
 
-        
     }
 
     
@@ -54,22 +61,27 @@ public class GameManager : MonoBehaviour
         {
             case 0:
                 meshRenderer.material = Materials[0];
-                    break;
+                baloon.name = Materials[0].name;
+                break;
             case 1:
                 meshRenderer.material = Materials[1];
-                baloon.name = "Red";
+                baloon.name = Materials[1].name;
                 break;
             case 2:
                 meshRenderer.material = Materials[2];
+                baloon.name = Materials[2].name;
                 break;
             case 3:
                 meshRenderer.material = Materials[3];
+                baloon.name = Materials[3].name;
                 break;
             case 4:
                 meshRenderer.material = Materials[4];
+                baloon.name = Materials[4].name;
                 break;
             case 5:
                 meshRenderer.material = Materials[5];
+                baloon.name = Materials[5].name;
                 break;
             
             
@@ -102,14 +114,15 @@ public class GameManager : MonoBehaviour
             if (hit.collider.CompareTag("Baloon"))
             {
                 hit.collider.gameObject.SetActive(false);
-                Score();
+                
                 if (hit.collider.name=="Red")
                 {
                     second -= 10;
                 }
                 else
                 {
-                    second += 10;
+                    second += 2;
+                    Score();
                 }
             }
 
@@ -119,11 +132,17 @@ public class GameManager : MonoBehaviour
     {
         score += 10;
         ReturnScore();
-        
+        ScoreTxt.text =score.ToString();
     }
     int ReturnScore()
     {
         return score;
+    }
+    void Second()
+    {
+        second -=Time.deltaTime;
+        int time = (int)second;
+        SecondTxt.text =time.ToString();
     }
   
     private void Update()
@@ -133,8 +152,8 @@ public class GameManager : MonoBehaviour
         {
             BaloonPop();
         }
-        second -= Time.deltaTime;
-        Debug.Log((int)second);
+        Second();
+        
         
     }
 }

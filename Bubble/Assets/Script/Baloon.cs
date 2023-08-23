@@ -10,7 +10,9 @@ public class Baloon : MonoBehaviour
     Color color;
     private void OnEnable()
     {
-        
+        CancelInvoke("ActiveFalse");
+
+        Invoke("ActiveFalse", 8f);
 
     }
  
@@ -20,10 +22,6 @@ public class Baloon : MonoBehaviour
     {
        
         transform.Translate(0, -speed * Time.deltaTime, 0);
-        if (transform.position.y >= 6.74f)
-        {
-            ActiveFalse();
-        }
        
             
     }
