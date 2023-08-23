@@ -7,15 +7,60 @@ public class Baloon : MonoBehaviour
 
     float speed=2f;
 
-    Color color;
+    MeshRenderer meshRenderer;
+
+    [SerializeField]
+    List<Material> Materials = new List<Material>();
+
+    GameManager gameManager;
+    GameObject GameManageR;
     private void OnEnable()
     {
         CancelInvoke("ActiveFalse");
 
         Invoke("ActiveFalse", 8f);
 
+        ChangeColor(gameObject);
     }
- 
+    private void Start()
+    {
+        GameManageR = GameObject.FindGameObjectWithTag("GameManager");
+        gameManager = GameManageR.GetComponent<GameManager>();
+    }
+    public void ChangeColor(GameObject bl)
+    {
+        meshRenderer = bl.GetComponent<MeshRenderer>();
+        int colorID = Random.Range(0, 8);
+        switch (colorID)
+        {
+            case 0:
+                meshRenderer.material = Materials[0];
+                bl.name = Materials[0].name;
+                break;
+            case 1:
+                meshRenderer.material = Materials[1];
+                bl.name = Materials[1].name;
+                break;
+            case 2:
+                meshRenderer.material = Materials[2];
+                bl.name = Materials[2].name;
+                break;
+            case 3:
+                meshRenderer.material = Materials[3];
+                bl.name = Materials[3].name;
+                break;
+            case 4:
+                meshRenderer.material = Materials[4];
+                bl.name = Materials[4].name;
+                break;
+            case 5:
+                meshRenderer.material = Materials[5];
+                bl.name = Materials[5].name;
+                break;
+
+
+        }
+    }
 
 
     void BaloonMovement()
@@ -33,7 +78,19 @@ public class Baloon : MonoBehaviour
     void Update()
     {
         BaloonMovement();
+
     }
-    
-    
+
+   
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Ylimit") && gameObject.name != "Red")
+        {
+            gameManager.score -= 5;
+            gameManager.WriteScore();
+        }
+    }
+   
+
+
 }

@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Baloon
+  - Ylimit
+  - GameManager
   layers:
   - Default
   - TransparentFX
