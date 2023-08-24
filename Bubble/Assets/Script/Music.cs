@@ -5,6 +5,11 @@ using UnityEngine;
 public class Music : MonoBehaviour
 {
     static Music music = null;
+
+    [SerializeField]
+    Texture2D cursorArrow;
+
+
     private void Awake()
     {
         if (music == null)
@@ -16,6 +21,12 @@ public class Music : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
     }
+    private void Start()
+    {
+        Cursor.SetCursor(cursorArrow, Vector2.zero, CursorMode.ForceSoftware);
+    }
+  
 
 }

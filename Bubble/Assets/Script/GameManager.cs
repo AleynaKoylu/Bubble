@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -34,11 +36,15 @@ public class GameManager : MonoBehaviour
     TextMeshProUGUI RestartScoreText;
 
     public float bSpeed=2;
+    float BalloonAddSpeed=1f;
+
+    [SerializeField]
+    GameObject MouseImage;
     void Start()
     {
 
         LoadBaloon();
-        InvokeRepeating("ShowBaloon", 0, 1f);
+        InvokeRepeating("ShowBaloon", 0, BalloonAddSpeed);
         SecondTxt.text = second.ToString();
         
         WriteScore();
@@ -46,18 +52,33 @@ public class GameManager : MonoBehaviour
         StopStartTime(1);
         
         InvokeRepeating("ChangeSpeed", 0, 20f);
+        InvokeRepeating("ChangeBalloonAdd", 15, 15f);
+       
+    }
+    void ChangeBalloonAdd()
+    {
+        BalloonAddSpeed -= 0.1f;
+        if (BalloonAddSpeed <= 0.2f)
+        {
+            BalloonAddSpeed = 0.2f;
+        }
+        CancelInvoke("ShowBaloon");
+        InvokeRepeating("ShowBaloon", 0, BalloonAddSpeed);
 
     }
-
     void ChangeSpeed()
     {
         bSpeed += 1f;
+        if (bSpeed >= 15f)
+        {
+            bSpeed = 15;
+        }
     }
   
     void LoadBaloon()
     {
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 20; i++)
         {
             GameObject newBaloon = Instantiate(Baloon, new Vector3(Random.Range(-2.30f, 2.30f), Random.Range(-4.8f, -6.5f), 1f), Quaternion.Euler(0, 0, -180));
 
@@ -95,6 +116,7 @@ public class GameManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, 100))
         {
+
             if (hit.collider.CompareTag("Baloon"))
             {
 
@@ -121,6 +143,7 @@ public class GameManager : MonoBehaviour
 
         }
     }
+  
     void Score()
     {
         score += 10;
@@ -181,6 +204,7 @@ public class GameManager : MonoBehaviour
         }
         Second();
         HighScore();
+ 
 
     }
     void HighScore()

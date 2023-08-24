@@ -87,7 +87,7 @@ public class Baloon : MonoBehaviour
         if (other.gameObject.CompareTag("Ylimit") && gameObject.name != "Red")
         {
             gameManager.score -= 5;
-            gameManager.second -= 3f;
+            gameManager.second -= 10f;
             gameManager.WriteSecond();
             gameManager.WriteScore();
         }
