@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     GameObject Baloon;
 
     public int score = 0;
-    float second = 20;
+    public float second = 20;
 
     List<GameObject> Baloons = new List<GameObject>();
 
@@ -18,8 +18,6 @@ public class GameManager : MonoBehaviour
     TextMeshProUGUI SecondTxt;
     [SerializeField]
     TextMeshProUGUI ScoreTxt;
-
-    public float time;
 
     [SerializeField]
     GameObject popEffect;
@@ -29,34 +27,42 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     GameObject RestartPanel;
+
+    [SerializeField]
+    TextMeshProUGUI HighScoreText;
+    [SerializeField]
+    TextMeshProUGUI RestartScoreText;
+
+    public float bSpeed=2;
     void Start()
     {
 
         LoadBaloon();
         InvokeRepeating("ShowBaloon", 0, 1f);
         SecondTxt.text = second.ToString();
+        
         WriteScore();
+        
+        StopStartTime(1);
+        
+        InvokeRepeating("ChangeSpeed", 0, 20f);
 
     }
 
-    public void IncreasingSpeed()
+    void ChangeSpeed()
     {
-        time += Time.deltaTime;
-
-        if (time >= time + 50)
-        {
-
-        }
+        bSpeed += 1f;
     }
+  
     void LoadBaloon()
     {
-        
+
         for (int i = 0; i < 10; i++)
         {
-            GameObject newBaloon = Instantiate(Baloon, new Vector3(Random.Range(-2.30f, 2.30f), Random.Range(-4.8f,-6.5f), 1f), Quaternion.Euler(0,0,-180));
-            
+            GameObject newBaloon = Instantiate(Baloon, new Vector3(Random.Range(-2.30f, 2.30f), Random.Range(-4.8f, -6.5f), 1f), Quaternion.Euler(0, 0, -180));
+
             Baloons.Add(newBaloon);
-          
+
             newBaloon.SetActive(false);
 
 
@@ -65,7 +71,7 @@ public class GameManager : MonoBehaviour
         }
 
     }
-   void ShowBaloon()
+    void ShowBaloon()
     {
         foreach (var b in Baloons)
         {
@@ -87,24 +93,24 @@ public class GameManager : MonoBehaviour
 
         RaycastHit hit;
 
-        if(Physics.Raycast(ray,out hit, 100))
+        if (Physics.Raycast(ray, out hit, 100))
         {
             if (hit.collider.CompareTag("Baloon"))
             {
 
-                GameObject newEffect = Instantiate(popEffect, hit.transform.position,Quaternion.identity);
+                GameObject newEffect = Instantiate(popEffect, hit.transform.position, Quaternion.identity);
                 newEffect.GetComponent<ParticleSystem>().startColor = hit.collider.GetComponent<MeshRenderer>().material.color;
 
                 Destroy(newEffect, .5f);
                 audioSource.Play();
                 hit.collider.gameObject.SetActive(false);
-                
-                if (hit.collider.name=="Red")
+
+                if (hit.collider.name == "Red")
                 {
-                    
-                   second -= 10;
-                    
-                    
+
+                    second -= 10;
+
+
                 }
                 else
                 {
@@ -127,24 +133,30 @@ public class GameManager : MonoBehaviour
     }
     void Second()
     {
-        second -=Time.deltaTime;
-        int time = (int)second;
-        SecondTxt.text =time.ToString();
-        if (time <= 0)
+        second -= Time.deltaTime;
+        
+        WriteSecond();
+        if (second <= 0)
         {
-            time = 0;
-            SecondTxt.text = time.ToString();
+            second = 0;
+            WriteSecond();
             StopStartTime(0);
             ActiveButton(RestartPanel);
         }
+    }
+    public void WriteSecond()
+    {
+        int time = (int)second;
+        SecondTxt.text = time.ToString();
     }
     public void WriteScore()
     {
         if (score >= 0)
         {
             ScoreTxt.text = score.ToString();
+            RestartScoreText.text = score.ToString();
         }
-            
+
     }
     public void LoadScenee(int sceneBuildIndex)
     {
@@ -155,31 +167,32 @@ public class GameManager : MonoBehaviour
     {
         activeObject.SetActive(true);
     }
- 
+
     public void StopStartTime(int value)
     {
         Time.timeScale = value;
     }
     private void Update()
     {
-      
-        if (Input.GetKeyDown(KeyCode.Mouse0)&&Time.timeScale==1)
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && Time.timeScale == 1)
         {
             BaloonPop();
         }
         Second();
         HighScore();
-        
+
     }
     void HighScore()
     {
-        Debug.Log(PlayerPrefs.GetInt("Highscore"));
+        HighScoreText.text = PlayerPrefs.GetInt("Highscore").ToString(); ;
         if (score > PlayerPrefs.GetInt("Highscore"))
         {
             PlayerPrefs.SetInt("Highscore", score);
-           
+            HighScoreText.text = PlayerPrefs.GetInt("Highscore").ToString();
+
         }
     }
 }
-     
+
 

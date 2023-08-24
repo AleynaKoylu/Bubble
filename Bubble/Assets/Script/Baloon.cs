@@ -5,7 +5,7 @@ using UnityEngine;
 public class Baloon : MonoBehaviour
 {
 
-    float speed=2f;
+    float speed;
 
     MeshRenderer meshRenderer;
 
@@ -16,17 +16,17 @@ public class Baloon : MonoBehaviour
     GameObject GameManageR;
     private void OnEnable()
     {
-        CancelInvoke("ActiveFalse");
-
-        Invoke("ActiveFalse", 8f);
-
-        ChangeColor(gameObject);
-    }
-    private void Start()
-    {
         GameManageR = GameObject.FindGameObjectWithTag("GameManager");
         gameManager = GameManageR.GetComponent<GameManager>();
+        CancelInvoke("ActiveFalse");
+
+        Invoke("ActiveFalse", 13f);
+
+        ChangeColor(gameObject);
+
+        speed = gameManager.bSpeed;
     }
+   
     public void ChangeColor(GameObject bl)
     {
         meshRenderer = bl.GetComponent<MeshRenderer>();
@@ -65,32 +65,33 @@ public class Baloon : MonoBehaviour
 
     void BaloonMovement()
     {
-       
+
         transform.Translate(0, -speed * Time.deltaTime, 0);
-       
-            
+
+
     }
     void ActiveFalse()
     {
         gameObject.SetActive(false);
     }
-    
+
     void Update()
     {
         BaloonMovement();
 
     }
 
-   
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Ylimit") && gameObject.name != "Red")
         {
             gameManager.score -= 5;
+            gameManager.second -= 3f;
+            gameManager.WriteSecond();
             gameManager.WriteScore();
         }
     }
-   
 
 
 }
